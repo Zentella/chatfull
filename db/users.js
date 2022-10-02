@@ -43,7 +43,7 @@ async function create_user(name, email, password) {
   const client = await pool.connect()
 
   await client.query(
-    `insert into users (name, email, password) values ($1, $2, $3,$4)`,
+    `insert into users (name, email, password) values ($1, $2, $3)`,
     [name, email, password]
   )
 
