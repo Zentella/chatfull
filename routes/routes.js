@@ -142,7 +142,7 @@ router.post('/register', async (req, res) => {
   }
   // 4. Finalmente lo agregamos a la base de dat
   const encrypted_pass = await bcrypt.hash(password, 10)
-  const new_user = await create_user(name, email, encrypted_pass)
+  await create_user(name, email, encrypted_pass)
   // usuario = { id: new_user.id, name, email }
   // 5. y redirigimos a la ruta principal
   res.redirect('/login')
