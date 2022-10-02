@@ -11,9 +11,7 @@ const router = Router()
 let usuario = {
   name: '',
   email: '',
-  id: '',
-  is_admin: '',
-  play: ''
+  id: ''
 }
 let name_us = undefined
 
@@ -36,10 +34,11 @@ router.get('/', protected_route, async (req, res) => {
     if (name_us == '' || name_us == 'all') {
       name_us = undefined
     }
-    const games = await get_games(name_us)
-    const toplay = await get_games(0)    
+    // const games = await get_games(name_us)
+    // const toplay = await get_games(0)    
     console.log('index ',usuario)
-    res.render('index.html', {usuario, games, toplay}) // , { games, toplay })
+    // res.render('index.html', {usuario, games, toplay}) // , { games, toplay })
+    res.render('index.html', {usuario}) // , { games, toplay })
   } catch (error) {
     console.log(error)
   }
@@ -88,9 +87,7 @@ router.post('/login', async (req, res) => {
   usuario = {
     name: user_find.name,
     email: user_find.email,
-    id: user_find.id,
-    is_admin: user_find.is_admin,
-    play: false
+    id: user_find.id
   }
   console.log('login ',user_find.name)
   return res.redirect('/')  
