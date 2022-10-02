@@ -49,7 +49,7 @@ async function create_user(name, email, password) {
 
   client.release()  
   
-  return resp.rows[0]
+  // return resp.rows[0]
 }
 
 module.exports = { get_ping, create_user, get_user}
