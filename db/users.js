@@ -1,5 +1,5 @@
-// const { pool } = require('./pool.js')
-const pool = require('./pool')
+const { pool } = require('./pool.js') // produccion
+// const pool = require('./pool')
 
 const get_ping = async (req, res) => {
   const resul = await pool.query(`SELECT NOW()`)
