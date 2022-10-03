@@ -3,66 +3,133 @@
 
 {% block main %}
 {{ navbar('/', usuario) }}
+<h2 class="text-center">Hello {{ usuario.name }}</h2>
 <div class="container">
-  <h4>Hello {{ usuario.name }}</h4>
-  {% if usuario.play %}
+  <div class="row">
+    <div class="col-12 col-md-4">
 
-    {% if toplay[0].score == 3 %}
-
-      <div class="text-center mt-3 border border-dark border-3 text-white bg-success bg-opacity-50" id= "game_usuario" >
-        <h2>That was great, {{usuario.name}}!  Your score is {{toplay[0].score}}/3  ({{toplay[0].percentage}}%).</h2>
-      </div>
-    {% elif toplay[0].score == 0 %}
-      <div class="text-center mt-3 border border-dark border-3 text-white bg-danger bg-opacity-50" id= "game_usuario" >
-        <h2>Aaaagh, {{usuario.name}}!  Your score is {{toplay[0].score}}/3  ({{toplay[0].percentage}}%) try again.</h2>
-      </div>
-    {% else %}
-      <div class="text-center mt-3 border border-dark border-3 text-white bg-warning bg-opacity-50" id= "game_usuario" >
-        <h2>That was fine, {{usuario.name}}!  Your score is {{toplay[0].score}}/3  ({{toplay[0].percentage}}%).</h2>
-      </div>
-    {% endif %}
-  {% endif %}
-  <div class="row mt-5 ">
-    <div class=" border border-3 border-dark col-md-5 offset-md-3 text-center p-3 bg-secondary bg-opacity-25 fs-6">
-      <a href="/lets_play" class=" btn btn-primary shadow mb-3" >Play!</a>
-      <p>Click the button above to start the trivia game.</p>
-    </div>
-  </div>
-  <div class="row mt-5">
-    <div class="col-12">
-
-      <form method="post" action="/search" class="d-flex justify-content-end" role="search">
-        <input class="form-control me-2 w-50" type="search" placeholder="all" aria-label="Search" name="nombre">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+      <form action="/message" method="post" class="bg-white mt-1 p-4 text-black">
+        <div class="mb-3">
+          <label for="" class="form-label">Post a message</label>
+          <textarea name="mensaje" id="" cols="140" rows="5" required></textarea>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary fw-bold">Post a message</button>
+        </div>
       </form>
+
     </div>
-
-  </div>
-</div>
-<div class="row">
-  <div class="col-12 border border-3 border-dark mt-4 "  style="height: 600px;overflow: scroll;">
-    <table class="table table-striped ">
-      <thead class="sticky-top bg-dark text-white">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Score</th>
-          <th scope="col">Percentage</th>
-        </tr>
-      </thead>
-      <tbody>        
-        {% for game in games %}
-          {% if game.score %}
-            <tr>
-              <td>{{game.name}}</td>
-              <td>{{game.score}}/3</td>
-              <td>{{game.percentage}}%</td>
-            </tr>
-          {%endif%}
-        {%endfor%}
-      </tbody>
-    </table>
   </div>
 </div>
 
+<!-- params -->
+<div class="container mt-5 bg-primary bg-opacity-25 p-4">
+  {% for ms in mensajes %}
+    <div class="row">
+      <div class="list-group barra overflow-auto">
+        <h6><b>{{ms.us}} </b> {{ms.fecha}} </h6>
 
+        <h5><b> Likes: </b>
+          <span>
+            <h6 id="lkk{{ms.id}}" class="badge bg-primary rounded-pill"> {{ms.likes}}</h6>
+          </span>
+        </h5>
+
+        <!-- mensaje -->
+        <p><a class="list-group-item list-group-item-action">{{ms.msj}}</a></p>
+        
+        <!-- <article class="col-sm-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <span data-id="{{ms.id}}" class="badge bg-primary rounded-pill">0</span>
+            </div>
+          </div>
+        </article> -->
+
+
+        <!-- <p><a href="/like/{{ms.id}}" onclick="add_like(event)" class="list-group-item list-group-item-action">
+            <span data-href="/like/{{ms.id}}">{{ms.likes}}</span>
+            {{ms.msj}}</a></p>
+          <button onclick="likes('{{ms.likes}}')" class="btn btn-outline-primary">Me gusta</button> -->
+
+        <div class="btn-group mb-5" role="group" aria-label="Basic example">
+            <form action="/like/" + {{ms.id}} method="post">
+              <input type="hidden" name="like" value=`${ms.id}` class="mb-3">
+              <button id="{{ms.id}}" onclick="agregarlikes(event, '{{ms.id}}')" class="btn btn-outline-primary" data-like="megusta">Like</button>
+              <!-- <button type="submit" class="btn btn-outline-primary">Me gusta</button> -->
+            </form>
+
+            <form id="1" action="/like/" + {{ms.id}} method="post" hidden>
+              <input type="hidden" name="like" value=`${ms.id}` class="mb-3">
+              <button onclick="likes()" class="btn btn-outline-primary">Me gusta</button>
+            </form>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#collapse"
+              aria-expanded="false" aria-controls="collapse">Comentar</button>
+            <button onclick="showForm('{{ms.id}}')" type="button" class="btn btn-outline-primary">Compartir</button>          
+            <br>
+          </div>
+        <div class="collapse" id="collapse">
+          <div class=" card card-body">
+            <textarea name="" id="" cols="100" rows="2" placeholder="Add a comment..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<script>
+  const likes = document.querySelector("#likes");
+  const template = document.querySelector("#template");
+
+  // const agregar = document.querySelectorAll(".card button");
+
+  const likesObjeto = {};
+
+  const agregarlikes = async (ev , id) => {
+    ev.preventDefault()
+    console.log('add', id)
+
+    console.log('id ',id);
+    // const span_mensajes = document.querySelector(`span[data-id="${id}]"`)
+    const h6_lk = document.getElementById(`lkk${id}`)
+    
+    // let num_likes = parseInt(span_memsaje.innerHTML)
+    let num_likes = parseInt(h6_lk.innerHTML)
+    
+    num_likes++
+    h6_lk.innerHTML = num_likes
+    await fetch(`/like/${id}`, {
+          method: "POST",
+          body: JSON.stringify({
+            id,
+          }),
+        })
+
+    // span_mensaje.innerHTML = num_likes
+
+  }
+
+  // usar jquery *****************************************************
+/*   const likes = async (ev, lks) => {
+    ev.preventDefault()
+    await fetch(`/like/${id}`)
+    const span_mensajes = document.querySelector(`span[data-id="${id}"`)
+    let num_likes = parseInt(span_memsaje.innerHTML)
+    num_likes++
+    span_mensaje.innerHTML = num_likes
+    console.log('lks ', lks);
+    lks++
+    console.log('lks new ', lks);
+    document.getElementById('lkk').innerHTML = '5'
+    // console.log('h5 ', $("#lkk").val());'
+    // const like_actual = $("#roommatesSelect").val()
+  }
+ */
+  /* const showForm = (id) => {
+    let comment = document.querySelector('#form_' + id)
+    form_comment.removeAttribute('hidden'), false)
+  } */
+
+
+</script>
 {% endblock %}

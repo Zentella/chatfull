@@ -40,7 +40,7 @@ router.get('/', protected_route, async (req, res) => {
     // res.render('index.html', {usuario, games, toplay}) // , { games, toplay })
     res.render('index.html', {usuario}) // , { games, toplay })
   } catch (error) {
-    console.log(error)
+     console.log(error)
   }
 })
 
@@ -123,7 +123,7 @@ router.post('/register', async (req, res) => {
   const name = req.body.name.trim()
   const email = req.body.email.trim()
   const password = req.body.password.trim()
-  const password_repeat = req.body.password_repeat.trim()
+  const password_repeat = req.body.password_repeat
 
   // 2. validamos que contraseñas coincidan
   if (password != password_repeat) {

@@ -73,6 +73,11 @@ app.listen(port, () => {
   console.log(`Servidor en puerto http://localhost:${port}`)
 })
 
+// psql -U postgres
+//Un1
+// \l
+// \c basedato
+
 // nodemon server
 
 // ver detalles de conexion

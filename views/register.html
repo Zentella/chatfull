@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Chatfull</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
@@ -25,6 +25,44 @@
     </div>
     {% endfor %}
     <div class="row">
+      <div class="col-12 col-md-4 offset-md-4 mt-5">
+        <h3 class="text-center text-primary fw-bold">chatfull</h3>
+
+        <form action="/register" method="post" class="bg-white mt-4 p-4 text-black shadow rounded">
+          <div class="mb-3">
+            <label for="" class="form-label">Name</label>
+            <input type="text" class="form-control" name="name">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email">
+            <div id="emailHelp" class="form-text text-black">We will never share your data</div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Re-Password</label>
+            <input type="password" class="form-control" name="password_repeat">
+          </div>
+          <!--  -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary float-end">Ok</button>
+            <p><a href="/login" class="auth-text text-primary">Login</a></p>
+          </div>
+          <!-- <div class="mb-3">
+            <h6 class="text-center text-primary fw-bold mt-2">¿Has olvidado la contraseña?</h6>
+            <hr>
+            
+            <div class="d-grid gap-2 col-8 mx-auto">
+              <button type="submit" class="btn btn-success btn-lg nueva float-none nueva align-middle">Crear cuenta nueva</button>
+            </div>
+          </div> -->
+        </form>
+      </div>
+    </div>
+    <!-- <div class="row">
       <div class="col-12 col-md-4 offset-md-4">
         <h3 class="text-center text-primary mt-5">Register</h3>
         <form action="/register" method="post" class="bg-secondary bg-opacity-50 mt-4 p-4 text-white">
@@ -48,9 +86,12 @@
           <p><a href="/login" class="auth-text text-primary">Login</a></p>
         </form>
       </div>
-    </div>
+    </div> -->
   </div>
   <script src="/js/bootstrap.bundle.min.js"></script>
   <script src="/js/scripts.js"></script>
 </body>
-</html>
+</html><div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Accept</label>
+          </div>

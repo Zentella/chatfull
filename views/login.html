@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Chatfull</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
@@ -25,6 +25,40 @@
     </div>
     {% endfor %}
     <div class="row">
+      <div class="col-12 col-md-4 offset-md-4 mt-5 bg-white mt-4 p-4 text-white shadow rounded">
+        <h3 class="text-center text-primary fw-bold">chatfull</h3>
+
+        <form action="/login" method="post" class="">
+          <div class="mb-3">
+            <!-- <label for="exampleInputEmail1" class="form-label">Email</label> -->
+            <input type="email" class="form-control" name="email" placeholder="Email">
+            <!-- <div id="emailHelp" class="form-text text-white">Jamás compartiremos tus datos con otra persona.</div> -->
+          </div>
+          <div class="mb-3">
+            <!-- <label for="exampleInputPassword1" class="form-label">Password</label> -->
+            <input type="password" class="form-control" name="password" placeholder="Password">
+          </div>
+          <!-- <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+          </div> -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary fw-bold">Log in</button>
+          </div>
+          <div class="mb-3">
+            <hr>
+          </div>
+        </form>
+
+        <form>
+          <div class="d-grid gap-2 col-8 mx-auto">
+              <a href="/register" class="btn btn-success" type="submit">Register</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <!-- <div class="row">
       <div class="col-12 col-md-4 offset-md-4">
         <h3 class="text-center text-primary mt-5">Log in</h3>
         <form action="/login" method="post" class="bg-secondary bg-opacity-50 mt-4 p-4 text-white">
@@ -40,7 +74,7 @@
           <p><a href="/register" class="text-primary">Register</a></p>
         </form>
       </div>
-    </div>
+    </div> -->
   </div>
   <script src="/js/bootstrap.bundle.min.js"></script>
   <script src="/js/scripts.js"></script>
