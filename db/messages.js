@@ -1,5 +1,5 @@
-// const { pool } = require('./pool.js') // produccion
-const pool = require('./pool_dev')
+const { pool } = require('./pool.js') // produccion
+// const pool = require('./pool_dev')
 console.log('messages.js')
 
 async function create_table() {
@@ -19,16 +19,15 @@ async function create_table() {
 }
 create_table()
 
-async function get_message(email) {
+async function get_messages() {
 
   const client = await pool.connect()
   const { rows } = await client.query(
-    `select * from messages where email=$1`,
-    [email]
+    `select * from messages`
   )
   client.release()
 
-  return rows[0]
+  return rows // [0]
 }
 
 async function create_message(user_id, message, likes) {
@@ -46,4 +45,4 @@ async function create_message(user_id, message, likes) {
   // return resp.rows[0]
 }
 
-module.exports = { create_message} // , get_message
+module.exports = { create_message, get_messages}

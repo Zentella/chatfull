@@ -27,7 +27,7 @@
   {% for ms in mensajes %}
     <div class="row">
       <div class="list-group barra overflow-auto">
-        <h6><b>{{ms.us}} </b> {{ms.fecha}} </h6>
+        <h6><b>{{ms.user_id}} </b> {{ms.date}} </h6>
 
         <h5><b> Likes: </b>
           <span>
@@ -36,7 +36,7 @@
         </h5>
 
         <!-- mensaje -->
-        <p><a class="list-group-item list-group-item-action">{{ms.msj}}</a></p>
+        <p><a class="list-group-item list-group-item-action">{{ms.message}}</a></p>
         
         <!-- <article class="col-sm-4 mb-3">
           <div class="card">

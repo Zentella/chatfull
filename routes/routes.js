@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const bcrypt = require('bcrypt')
 const { get_user, create_user } = require('../db/users.js')
-const { create_message } = require('../db/messages.js') //get_message, 
+const { get_messages, create_message } = require('../db/messages.js')
 
 
 const router = Router()
@@ -29,11 +29,13 @@ function protected_route(req, res, next) {
 // index GET
 router.get('/', protected_route, async (req, res) => {
   try {
+
     if (name_us == '' || name_us == 'all') {
       name_us = undefined
     } 
+    const mensajes = await get_messages()
     console.log('index ',usuario)
-    res.render('index.html', {usuario}) // , { games, toplay })
+    res.render('index.html', {usuario, mensajes}) // , { games, toplay })
   } catch (error) {
      console.log(error)
   }
