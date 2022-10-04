@@ -77,6 +77,12 @@ app.listen(port, () => {
 //Un1
 // \l
 // \c basedato
+// \dt
+// q
+// select * from users;
+// select * from messages;
+// select * from comments;
+// drop table messages;
 
 // nodemon server
 

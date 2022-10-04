@@ -10,7 +10,8 @@ async function create_table() {
       id serial primary key,
       user_id varchar(255) not null,
       message varchar(255) not null,
-      likes int not null      
+      likes int not null,
+      date timestamp without time zone DEFAULT now()
     )
   `)
   // 3. Devuelvo el cliente al pool date timestamp without time zone DEFAULT now()
