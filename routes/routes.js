@@ -1,12 +1,12 @@
 const { Router } = require('express')
 const bcrypt = require('bcrypt')
 const { get_user, create_user } = require('../db/users.js')
-// const { api_users, get_ping } = require('../db/users')
-// const { get_questions, create_question } = require('../db/questions')
-// const { get_answer } = require('../db/answers.js')
-// const { get_games, create_game } = require('../db/games.js')
+const { create_message } = require('../db/messages.js') //get_message, 
+
 
 const router = Router()
+
+let email = ''
 
 let usuario = {
   name: '',
@@ -15,8 +15,6 @@ let usuario = {
 }
 let name_us = undefined
 
-// res api
-// router.get('/api/users', api_users)
 // router.get('/ping', get_ping)
 
 // Vamos a crear un middleware para ver si el usuario está logueado o no
@@ -33,11 +31,8 @@ router.get('/', protected_route, async (req, res) => {
   try {
     if (name_us == '' || name_us == 'all') {
       name_us = undefined
-    }
-    // const games = await get_games(name_us)
-    // const toplay = await get_games(0)    
+    } 
     console.log('index ',usuario)
-    // res.render('index.html', {usuario, games, toplay}) // , { games, toplay })
     res.render('index.html', {usuario}) // , { games, toplay })
   } catch (error) {
      console.log(error)
@@ -51,15 +46,21 @@ router.get('/login', (req, res) => {
   res.render('login.html')
 })
 
-// new_question GET
-router.get('/new_question', protected_route, (req, res) => {
-  res.render('new_question.html')
+router.get('/logout', (req, res) => {
+  usuario = null 
+  name_us = undefined
+  res.redirect('/login')
 })
 
-// ruta que procesa el formulario de Login
+router.get('/register', (req, res) => {
+  // const messages = req.flash()   
+  // res.render('register.html', {messages})
+  res.render('register.html')
+})
+
 router.post('/login', async (req, res) => {
   // 1. me traigo los dat del formulario
-  const email = req.body.email.trim()
+  email = req.body.email.trim()
   const password = req.body.password.trim()
 
   // 2. intento buscar al usuario en base a su email 
@@ -93,44 +94,18 @@ router.post('/login', async (req, res) => {
   return res.redirect('/')  
 })
 
-router.get('/logout', (req, res) => {
-  usuario = null 
-  name_us = undefined
-  res.redirect('/login')
-})
-
-router.get('/register', (req, res) => {
-  // const messages = req.flash()   
-  // res.render('register.html', {messages})
-  res.render('register.html')
-})
-
-// lets_play GET
-router.get('/lets_play', protected_route, async (req, res) => {
-  try {
-
-    const dat = await get_questions()
-    await get_answer(dat)
-    res.render('lets_play.html', { dat })
-
-  } catch (error) {
-    console.log(error)
-  }
-})
-
 router.post('/register', async (req, res) => {
-  // 1. me traigo los dat del formulario
   const name = req.body.name.trim()
-  const email = req.body.email.trim()
+  email = req.body.email.trim()
   const password = req.body.password.trim()
   const password_repeat = req.body.password_repeat
 
-  // 2. validamos que contraseñas coincidan
+  // validamos que contraseñas coincidan
   if (password != password_repeat) {
     // req.flash('errors', 'Las contraseñas no coinciden')
     return res.redirect('/register')
   }
-  // 3. validamos que no exista otro usuario con ese mismo correo
+  // validamos que no exista otro usuario con ese mismo correo
   const current_user = await get_user(email)
   if (current_user) {
     // req.flash('errors', 'Ese email ya está ocupado')
@@ -140,81 +115,64 @@ router.post('/register', async (req, res) => {
   // 4. Finalmente lo agregamos a la base de dat
   const encrypted_pass = await bcrypt.hash(password, 10)
   await create_user(name, email, encrypted_pass)
-  // usuario = { id: new_user.id, name, email }
-  // 5. y redirigimos a la ruta principal
   res.redirect('/login')
 })
 
-// new_question POST
-router.post('/new_question', protected_route, async (req, res) => {
+router.post('/message', async (req, res) => {
+  console.log('message ')
+  const likes = 0
+  console.log('message ', req.body.mensaje, email, likes)
+  /* if (req.session.mensajes == undefined) {
+    req.session.mensajes = []
+  } */
   try {
+    const mensaje = req.body.mensaje //.trim() //////
 
-    if (usuario.is_admin == true) {
-      const question = req.body.question.trim()
-      const answer_true = req.body.answer_true.trim()
-      const false1 = req.body.answer_false1.trim()
-      const false2 = req.body.answer_false2.trim()
-      const false3 = req.body.answer_false3.trim()
-      const false4 = req.body.answer_false4.trim()
-      await create_question(question, answer_true, false1, false2, false3, false4)
-    }
-    res.redirect('/new_question')
+    /* console.log('mensaje user id ', mensaje, req.session.user);
+    const userEmail = req.session.user.email //// */
 
-  } catch (error) {
-    console.log(error)
-  }
-})
+    // console.log('userEmail ', userEmail);
+    /*  const us_id = await User.findOne({
+       where: { email: userEmail }
+     }) */
+    // console.log('us_id ', us_id);
 
-// answers del juego POST
-router.post('/lets_play', async (req, res) => {
+    await create_message(email, mensaje, likes)
 
-  let result = 0
-  let percentage = 0
+    // const mess = await Message.findAll({ include: 'user', include: 'comment' }); /************** */
 
-  try {
-    const question1 = req.body.question1
-    const question2 = req.body.question2
-    const question3 = req.body.question3
+    // console.log('mess ', mess);
+    /*
+    const mess = await Message.findByPk(1, { include: 'user' });
+    console.log('mess ', mess);
+    console.log('mess *****************',mess.toJSON())
+    console.log('obj ', mess.user.firstName);
+    */
+    // res.send({mess})
+    // const messas = []
 
-    const user_id = usuario.id
-    if (question1 == '1') {
-      result++
-    }
-    if (question2 == '1') {
-      result++
-    }
-    if (question3 == '1') {
-      result++
-    }
+    /* mess.forEach((item) => {
+      // messas.push(item.UserId, item.message, item.createdAt)
+      const id = item.id
+      const likes = item.likes
+      const us = item.user.firstName
+      const msj = item.message
+      const fecha = item.createdAt
+      console.log('id, likes, us, msj, fecha ', id, likes, us, msj, fecha);
 
-    percentage = ((result * 100) / 3).toFixed(1)
-    if (percentage > 0) {
+      req.session.mensajes.push({ id, likes, us, msj, fecha })
+    }) */
+    //req.session.mensajes.push({ us, msj, fecha })
 
-      await create_game(result, percentage, user_id)
-      console.log('jugada guardada')
-    }
-    usuario.play = true
     res.redirect('/')
 
   } catch (error) {
-    console.log(error)
+    res.status(400)//.redirect('/')
+
+    // res.status(400).json({ error })
   }
 })
 
-// /search
-router.post('/search', (req, res) => {
-  try {
-
-    name_us = req.body.nombre.trim()
-    res.redirect('/')
-
-  } catch (error) {
-    console.log(error)
-  }
-
-})
-
-// 404 GET>
 router.get('*', (req, res) => {
   res.render('404.html')
 })
