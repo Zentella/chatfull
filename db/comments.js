@@ -1,16 +1,16 @@
 // const { pool } = require('./pool.js') // produccion
 const pool = require('./pool_dev')
-console.log('messages.js')
+console.log('comments.js')
 
 async function create_table() {
   const client = await pool.connect()
 
   await client.query(`
-    create table if not exists messages (
-      id serial primary key,
+    create table if not exists comments (
+      primary key (user_id, message_id),
       user_id int not null references users(id),
-      message varchar(255) not null,
-      likes int not null,
+      message_id int not null references messages(id),
+      comment varchar(255) not null,
       date timestamp without time zone DEFAULT now()
     )
   `)
@@ -19,25 +19,25 @@ async function create_table() {
 }
 create_table()
 
-async function get_messages() {
+async function get_comments() {
 
   const client = await pool.connect()
   const { rows } = await client.query(
-    `select * from messages order by date desc`
+    `select user_id, message_id, comment, date from comments` //, name    ... , users`
   )
   client.release()
 
   return rows // [0]
 }
 
-async function create_message(user_id, message, likes) {
-  console.log('create_message')
+async function create_comment(user_id, message_id, comment) {
+  console.log('create_comment ', user_id, message_id, comment)
 
   const client = await pool.connect()
 
   await client.query(
-    `insert into messages (user_id, message, likes) values ($1, $2, $3)`,
-    [user_id, message, likes]
+    `insert into comments (user_id, message_id, comment) values ($1, $2, $3)`,
+    [user_id, message_id, comment]
   )
 
   client.release()  
@@ -45,12 +45,12 @@ async function create_message(user_id, message, likes) {
   // return resp.rows[0]
 }
 
-async function get_message(id) {
+async function get_comment(id) {
 
   const client = await pool.connect()
 
   const { rows } = await client.query(
-    `select * from messages where id=$1`,
+    `select * from comments where id=$1`,
     [id]
   )
   client.release()
@@ -58,12 +58,12 @@ async function get_message(id) {
   return rows[0]
 }
 
-async function update_message(likes, id) {
+async function update_comment(likes, id) {
 
   const client = await pool.connect()
 
   await client.query(
-    `update messages set likes = $1 where id = $2`,
+    `update comments set likes = $1 where id = $2`,
     [likes, id]
   )
   client.release()
@@ -71,4 +71,4 @@ async function update_message(likes, id) {
   // return rows[0]
 }
 
-module.exports = { create_message, get_messages, get_message, update_message}
+module.exports = { create_comment, get_comments} //, get_comment, update_comment}

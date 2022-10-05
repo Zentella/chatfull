@@ -16,3 +16,12 @@ const config = {
 const pool = new Pool(config)
 
 module.exports = pool;
+
+/*  secret
+  module.exports = {
+  db_name: 'basedato',
+  db_pass: 'password',
+  db_user: 'postgres',
+  app_name: 'nombre_app',
+  db_host: 'localhost'
+} */

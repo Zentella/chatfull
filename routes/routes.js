@@ -1,17 +1,17 @@
 const { Router } = require('express')
 const bcrypt = require('bcrypt')
 const { get_user, create_user } = require('../db/users.js')
-const { get_messages, create_message } = require('../db/messages.js')
-
+const { get_messages, get_message, update_message, create_message } = require('../db/messages.js')
+const { create_comment, get_comments } = require('../db/comments.js')
 
 const router = Router()
 
-let email = ''
+// let id_user = 0
 
 let usuario = {
   name: '',
   email: '',
-  id: ''
+  id: 0
 }
 let name_us = undefined
 
@@ -32,10 +32,13 @@ router.get('/', protected_route, async (req, res) => {
 
     if (name_us == '' || name_us == 'all') {
       name_us = undefined
-    } 
+    }
+
     const mensajes = await get_messages()
+    const comentarios = await get_comments()
+
     console.log('index ',usuario)
-    res.render('index.html', {usuario, mensajes}) // , { games, toplay })
+    res.render('index.html', {usuario, mensajes, comentarios}) // , { games, toplay })
   } catch (error) {
      console.log(error)
   }
@@ -62,7 +65,7 @@ router.get('/register', (req, res) => {
 
 router.post('/login', async (req, res) => {
   // 1. me traigo los dat del formulario
-  email = req.body.email.trim()
+  const email = req.body.email.trim()
   const password = req.body.password.trim()
 
   // 2. intento buscar al usuario en base a su email 
@@ -98,7 +101,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   const name = req.body.name.trim()
-  email = req.body.email.trim()
+  const email = req.body.email.trim()
   const password = req.body.password.trim()
   const password_repeat = req.body.password_repeat
 
@@ -123,7 +126,7 @@ router.post('/register', async (req, res) => {
 router.post('/message', async (req, res) => {
   console.log('message ')
   const likes = 0
-  console.log('message ', req.body.mensaje, email, likes)
+  console.log('message ', req.body.mensaje, usuario.id, likes)
   /* if (req.session.mensajes == undefined) {
     req.session.mensajes = []
   } */
@@ -139,7 +142,7 @@ router.post('/message', async (req, res) => {
      }) */
     // console.log('us_id ', us_id);
 
-    await create_message(email, mensaje, likes)
+    await create_message(usuario.id, mensaje, likes)
 
     // const mess = await Message.findAll({ include: 'user', include: 'comment' }); /************** */
 
@@ -174,6 +177,74 @@ router.post('/message', async (req, res) => {
     // res.status(400).json({ error })
   }
 })
+
+router.post('/like/:id', async (req, res) => { // req.params.id // id ok
+  // const likes = 1
+  let likes
+  const id = req.params.id
+  console.log('post likesssss');
+  console.log('params id ', req.params.id); // ok
+  /* const like = req.body.like
+  const likes = 1
+  console.log('lk ',like); */
+
+/*   if (req.session.likes == undefined) {
+    req.session.likes = 0
+  } */ 
+
+    // req.session.likes += likes
+    // req.session.likes ++
+    // console.log('likes ',req.session.likes);
+
+    const mess = await get_message(id)
+     console.log('mess like ', mess.likes);
+     likes = mess.likes + 1
+
+  await update_message(likes, id)
+
+  res.redirect('/')
+})
+
+router.post('/comment/:id', async (req, res) => {
+  // if (req.session.comentarios == undefined) {
+  //   req.session.comentarios = []
+  // }
+  try {
+    const comentario = req.body.comentario
+    const mensaje_id = req.params.id
+
+    console.log('msj_id user_usuario.id comentario ', mensaje_id, usuario.id, comentario)
+    /*  const us_id = await User.findOne({
+       where: { email: userEmail }
+     }) */
+    // console.log('us_id ', us_id);
+
+    await create_comment(usuario.id, mensaje_id, comentario)
+
+    // const mess = await Comment.findAll({ include: 'user' });
+
+    // console.log('mess ', mess);
+
+   /*  mess.forEach((item) => {
+      // messas.push(item.UserId, item.message, item.createdAt)
+      const id = item.id
+      const likes = item.likes
+      const us = item.user.firstName
+      const msj = item.comment
+      const fecha = item.createdAt
+      console.log('id, likes, us, msj, fecha ', id, likes, us, msj, fecha);
+
+      req.session.comentarios.push({ id, likes, us, msj, fecha })
+    }) */
+    //req.session.mensajes.push({ us, msj, fecha })
+
+    res.redirect('/')
+
+  } catch (error) {
+    res.status(400)
+  }
+})
+
 
 router.get('*', (req, res) => {
   res.render('404.html')
