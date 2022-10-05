@@ -7,13 +7,13 @@ async function create_table() {
 
   await client.query(`
     create table if not exists comments (
-      primary key (user_id, message_id),
-      user_id int not null references users(id),
-      message_id int not null references messages(id),
+      id serial primary key,
+      user_id int not null references users(id),      
       comment varchar(255) not null,
       date timestamp without time zone DEFAULT now()
     )
   `)
+  // message_id int not null references messages(id),
   // 3. Devuelvo el cliente al pool date timestamp without time zone DEFAULT now()
   client.release()
 }
