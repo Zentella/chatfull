@@ -19,10 +19,10 @@
     <div class="col-12 col-md-4">
 
       <!-- formulario message -->
-      <form action="/message" method="post" class="bg-white mt-1 p-4 text-black ms-5">
+      <form action="/message" method="post" class="bg-white mt-1 p-4 text-black">
         <div class="mb-3 ">
           <label for="" class="form-label">Post a message</label>
-          <textarea name="mensaje" id="" cols="120" rows="5" required></textarea>
+          <textarea name="mensaje" id="" cols="30" rows="5" required></textarea>
         </div>
         <div class="d-grid gap-2">
           <button type="submit" class="btn btn-primary fw-bold">Post a message</button>
@@ -38,7 +38,7 @@
   {% for ms in mensajes %}
     <div class="row">
       <div class="list-group barra overflow-auto mt-2">
-        <h6><b class="fs-4">{{ms.name}} </b><span class="float-end fs-6"> {{ms.date}} </span></h6>
+        <h6><b class="fs-4">{{ms.name}} </b><span class="float-end date"> {{ms.date}} </span></h6>
 
         <div class="avatar">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512">
@@ -77,7 +77,7 @@
         {% for comentario in comentarios %}
         {% if comentario.message_id == ms.id %}
         <div class="">
-          <div class="row">{{comentario.name}} :
+          <div class="row ms-2 mt-2">{{comentario.name}} :
             <div class="avatar">
               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
                  <path d="M396 155v16.91c0 77.2-62.8 140-140 140l-40-282L396 155z" fill="#{{ comentario.face2 }}"/>
@@ -93,7 +93,7 @@
             </div>
           </div>
           <p class="float-end">
-            <span>{{comentario.date}}</span>
+            <span class="date">{{comentario.date}}</span>
             <hr>
           </p>
         </div>

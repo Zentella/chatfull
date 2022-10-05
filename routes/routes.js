@@ -37,7 +37,7 @@ router.get('/', protected_route, async (req, res) => {
     const mensajes = await get_messages()
     const comentarios = await get_comments()
 
-    console.log('index ',usuario)
+    // console.log('index ',usuario)
     // console.log('mensajes ',mensajes[0].name)
 
     res.render('index.html', {usuario, mensajes, comentarios}) // , { games, toplay })
