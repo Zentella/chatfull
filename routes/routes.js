@@ -53,7 +53,7 @@ router.get('/login', (req, res) => {
   res.render('login.html')
 })
 
-router.get('/logout', (req, res) => {
+router.get('/logout', protected_route, (req, res) => {
   usuario = null 
   name_us = undefined
   res.redirect('/login')
@@ -138,7 +138,7 @@ router.post('/register', async (req, res) => {
   res.redirect('/login')
 })
 
-router.post('/message', async (req, res) => {
+router.post('/message', protected_route, async (req, res) => {
   console.log('message ')
   const likes = 0
   console.log('message ', req.body.mensaje, usuario.id, likes)
@@ -193,7 +193,7 @@ router.post('/message', async (req, res) => {
   }
 })
 
-router.post('/like/:id', async (req, res) => { // req.params.id // id ok
+router.post('/like/:id', protected_route, async (req, res) => { // req.params.id // id ok
   // const likes = 1
   let likes
   const id = req.params.id
@@ -220,7 +220,7 @@ router.post('/like/:id', async (req, res) => { // req.params.id // id ok
   res.redirect('/')
 })
 
-router.post('/comment/:id', async (req, res) => {
+router.post('/comment/:id', protected_route, async (req, res) => {
   // if (req.session.comentarios == undefined) {
   //   req.session.comentarios = []
   // }
