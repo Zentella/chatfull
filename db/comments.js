@@ -8,7 +8,8 @@ async function create_table() {
   await client.query(`
     create table if not exists comments (
       id serial primary key,
-      user_id int not null references users(id),      
+      user_id int not null references users(id),
+      message_id int not null references messages(id),     
       comment varchar(255) not null,
       date timestamp without time zone DEFAULT now()
     )
