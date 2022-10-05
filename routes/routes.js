@@ -53,7 +53,7 @@ router.get('/login', (req, res) => {
   res.render('login.html')
 })
 
-router.get('/logout', protected_route, (req, res) => {
+router.get('/logout', (req, res) => {
   usuario = null 
   name_us = undefined
   res.redirect('/login')
