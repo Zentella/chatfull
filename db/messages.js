@@ -1,5 +1,5 @@
-// const { pool } = require('./pool.js') // produccion
-const pool = require('./pool_dev')
+const { pool } = require('./pool.js') // produccion
+// const pool = require('./pool_dev')
 console.log('messages.js')
 
 async function create_table() {
