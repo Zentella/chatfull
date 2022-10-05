@@ -1,5 +1,5 @@
-// const { pool } = require('./pool.js') // produccion
-const pool = require('./pool_dev')
+const { pool } = require('./pool.js') // produccion
+// const pool = require('./pool_dev')
 console.log('messages.js')
 
 async function create_table() {
@@ -23,7 +23,7 @@ async function get_messages() {
 
   const client = await pool.connect()
   const { rows } = await client.query(
-    `select * from messages order by date desc`
+    `select id(messages), user_id, message, likes, date, name, face, face2, hair, hair2, eyes from messages join users on users.id = messages.user_id order by date desc`
   )
   client.release()
 

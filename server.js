@@ -82,7 +82,7 @@ app.listen(port, () => {
 // select * from users;
 // select * from messages;
 // select * from comments;
-// drop table messages;
+// drop table messages cascade;
 
 // nodemon server
 

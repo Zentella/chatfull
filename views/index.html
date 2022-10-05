@@ -4,6 +4,16 @@
 {% block main %}
 {{ navbar('/', usuario) }}
 <h2 class="text-center">Hello {{ usuario.name }}</h2>
+<div class="people">
+  <svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 512 512">
+     <path d="M396 155v16.91c0 77.2-62.8 140-140 140l-40-282L396 155z" fill="#{{ usuario.face2 }}"/>
+     <path d="M256 19.91v292c-77.2 0-140-62.8-140-140 0 0 15.855-152 140-152z" fill="#{{ usuario.face }}"/>
+     <path d="M396 140v15h-85c-23.82 0-44.96-14.1-54.55-35H256l-30-60 30-60c77.2 0 140 62.8 140 140z" fill="#{{ usuario.hair2 }}"/>
+     <path d="M116 140v32h30v-32c0-39.152 20.564-73.586 51.455-93.084A59.912 59.912 0 0 0 196 60c0 33.08 26.92 60 60 60V0c-77.196 0-140 62.804-140 140z" fill="#{{ usuario.hair }}"/>
+     <circle cx="201.86" cy="175" r="15" fill="#{{ usuario.eyes }}"/>
+     <circle cx="301.86" cy="175" r="15" fill="#{{ usuario.eyes }}"/>
+  </svg>
+</div>
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-4">
@@ -27,37 +37,57 @@
 <div class="container mt-5 bg-primary bg-opacity-25 p-4">
   {% for ms in mensajes %}
     <div class="row">
-      <div class="list-group barra overflow-auto">
-        <h6><b>{{ms.user_id}} </b> {{ms.date}} </h6>
+      <div class="list-group barra overflow-auto mt-2">
+        <h6><b class="fs-4">{{ms.name}} </b><span class="float-end fs-6"> {{ms.date}} </span></h6>
 
-        <h5><b> Likes: </b>
-          <span>
-            <h6 id="lkk{{ms.id}}" class="badge bg-primary rounded-pill"> {{ms.likes}}</h6>
-          </span>
-        </h5>
+        <div class="avatar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512">
+             <path d="M396 155v16.91c0 77.2-62.8 140-140 140l-40-282L396 155z" fill="#{{ ms.face2 }}"/>
+             <path d="M256 19.91v292c-77.2 0-140-62.8-140-140 0 0 15.855-152 140-152z" fill="#{{ ms.face }}"/>
+             <path d="M396 140v15h-85c-23.82 0-44.96-14.1-54.55-35H256l-30-60 30-60c77.2 0 140 62.8 140 140z" fill="#{{ ms.hair2 }}"/>
+             <path d="M116 140v32h30v-32c0-39.152 20.564-73.586 51.455-93.084A59.912 59.912 0 0 0 196 60c0 33.08 26.92 60 60 60V0c-77.196 0-140 62.804-140 140z" fill="#{{ ms.hair }}"/>
+             <circle cx="201.86" cy="175" r="15" fill="#{{ ms.eyes }}"/>
+             <circle cx="301.86" cy="175" r="15" fill="#{{ ms.eyes }}"/>
+          </svg>
+        </div>
 
+        
         <!-- mensaje -->
         <p><a class="list-group-item list-group-item-action">{{ms.message}}</a></p>
-        
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <form action="/like/" + {{ms.id}} method="post">
-              <input type="hidden" name="like" value=`${ms.id}` class="mb-3">
-              <button id="{{ms.id}}" onclick="agregarlikes(event, '{{ms.id}}')" class="btn btn-outline-primary" data-like="megusta">Like</button>
-            </form>
 
-            <!-- <button type="button" class="btn btn-outline-primary">Share</button> -->
-            <button onclick="showForm('{{ms.id}}')" type="button" class="btn btn-outline-primary">Comment</button>          
-            <br>
-          </div>
+        <span>
+          <h6 id="lkk{{ms.id}}" class="badge bg-primary rounded-pill"> {{ms.likes}}</h6>
+        </span>
+
+        <form action="/like/" + {{ms.id}} method="post" class="mb-2">
+          <input type="hidden" name="like" value=`${ms.id}`>
+          <a id="{{ms.id}}" onclick="agregarlikes(event, '{{ms.id}}')" type="button"  class="float-start" data-like="megusta"><i class="bi bi-hand-thumbs-up-fill ms-2"></i></a>
+          <a onclick="showForm('{{ms.id}}')" type="button" class="ms-2"><i class="bi bi-chat-right-text-fill"></i></a>          
+        </form>
+
+        <!-- <button type="button" class="btn btn-outline-primary">Share</button> -->
+        <div>
+        </div>
+        <br>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-10 offset-1 bg-white mt-2 mb-5">
+      <div class="col-10 offset-1 bg-white">
         {% for comentario in comentarios %}
         {% if comentario.message_id == ms.id %}
-        <div class=" mb-2">
-          <div class="row">{{comentario.user_id}} :
+        <div class="">
+          <div class="row">{{comentario.name}} :
+            <div class="avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
+                 <path d="M396 155v16.91c0 77.2-62.8 140-140 140l-40-282L396 155z" fill="#{{ comentario.face2 }}"/>
+                 <path d="M256 19.91v292c-77.2 0-140-62.8-140-140 0 0 15.855-152 140-152z" fill="#{{ comentario.face }}"/>
+                 <path d="M396 140v15h-85c-23.82 0-44.96-14.1-54.55-35H256l-30-60 30-60c77.2 0 140 62.8 140 140z" fill="#{{ comentario.hair2 }}"/>
+                 <path d="M116 140v32h30v-32c0-39.152 20.564-73.586 51.455-93.084A59.912 59.912 0 0 0 196 60c0 33.08 26.92 60 60 60V0c-77.196 0-140 62.804-140 140z" fill="#{{ comentario.hair }}"/>
+                 <circle cx="201.86" cy="175" r="15" fill="#{{ comentario.eyes }}"/>
+                 <circle cx="301.86" cy="175" r="15" fill="#{{ comentario.eyes }}"/>
+              </svg>
+            </div>
             <div class="col-12">
               <p>{{comentario.comment}}</p>
             </div>
@@ -84,6 +114,7 @@
   {% endfor %}
 </div>
 <script>
+  let primer_like = ''
   const likes = document.querySelector("#likes");
   const template = document.querySelector("#template");
 
@@ -97,20 +128,23 @@
     
     let num_likes = parseInt(h6_lk.innerHTML)
     
-    num_likes++
-    h6_lk.innerHTML = num_likes
-    await fetch(`/like/${id}`, {
-      method: "POST",
-      body: JSON.stringify({
-        id,
-      }),
-    })
+    if (primer_like != id) {
+      num_likes++
+      h6_lk.innerHTML = num_likes
+      await fetch(`/like/${id}`, {
+        method: "POST",
+        body: JSON.stringify({
+          id,
+        }),
+      })
+    }
+    primer_like = id
 
   }
 
   const showForm = (id) => {
     let comment = document.querySelector('#form_' + id)
-    comment.removeAttribute('hidden')
+    comment.toggleAttribute('hidden')
   }
 
 

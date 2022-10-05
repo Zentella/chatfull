@@ -38,6 +38,8 @@ router.get('/', protected_route, async (req, res) => {
     const comentarios = await get_comments()
 
     console.log('index ',usuario)
+    // console.log('mensajes ',mensajes[0].name)
+
     res.render('index.html', {usuario, mensajes, comentarios}) // , { games, toplay })
   } catch (error) {
      console.log(error)
@@ -93,7 +95,12 @@ router.post('/login', async (req, res) => {
   usuario = {
     name: user_find.name,
     email: user_find.email,
-    id: user_find.id
+    id: user_find.id,
+    face: user_find.face,
+    face2: user_find.face2,
+    hair: user_find.hair,
+    hair2: user_find.hair2,
+    eyes: user_find.eyes
   }
   console.log('login ',user_find.name)
   return res.redirect('/')  
@@ -104,7 +111,15 @@ router.post('/register', async (req, res) => {
   const email = req.body.email.trim()
   const password = req.body.password.trim()
   const password_repeat = req.body.password_repeat
+  
+  const face = Math.floor(Math.random()*16777215).toString(16)
+  const face2 = Math.floor(Math.random()*16777215).toString(16)
 
+  const hair = Math.floor(Math.random()*16777215).toString(16)
+  const hair2 = Math.floor(Math.random()*16777215).toString(16)
+
+  const eyes = Math.floor(Math.random()*16777215).toString(16)  
+  
   // validamos que contraseñas coincidan
   if (password != password_repeat) {
     // req.flash('errors', 'Las contraseñas no coinciden')
@@ -119,7 +134,7 @@ router.post('/register', async (req, res) => {
   }
   // 4. Finalmente lo agregamos a la base de dat
   const encrypted_pass = await bcrypt.hash(password, 10)
-  await create_user(name, email, encrypted_pass)
+  await create_user(name, email, encrypted_pass, face, face2, hair, hair2, eyes)
   res.redirect('/login')
 })
 

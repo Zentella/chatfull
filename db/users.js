@@ -1,5 +1,5 @@
-// const { pool } = require('./pool.js') // produccion
-const pool = require('./pool_dev')
+const { pool } = require('./pool.js') // produccion
+// const pool = require('./pool_dev')
 
 const get_ping = async (req, res) => {
   const resul = await pool.query(`SELECT NOW()`)
@@ -18,7 +18,12 @@ async function create_table() {
       id serial primary key,
       name varchar(255) not null,
       email varchar(255) not null unique,
-      password varchar(255) not null
+      password varchar(255) not null,
+      face varchar(255) not null,
+      face2 varchar(255) not null,
+      hair varchar(255) not null,
+      hair2 varchar(255) not null,
+      eyes varchar(255) not null
     )
   `)
   // 3. Devuelvo el cliente al pool
@@ -38,13 +43,13 @@ async function get_user(email) {
   return rows[0]
 }
 
-async function create_user(name, email, password) {
+async function create_user(name, email, password, face, face2, hair, hair2, eyes) {
 
   const client = await pool.connect()
 
   await client.query(
-    `insert into users (name, email, password) values ($1, $2, $3)`,
-    [name, email, password]
+    `insert into users (name, email, password, face, face2, hair, hair2, eyes) values ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [name, email, password, face, face2, hair, hair2, eyes]
   )
 
   client.release()  

@@ -8,17 +8,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link {% if ruta == '/' %}active{% endif %}" aria-current="page" href="/">Home</a>
+          <a class="nav-link {% if ruta == '/' %}active{% endif %}" aria-current="page" fixed href="">{{ usuario.name }}</a>
         </li>
         <li class="nav-item">
           <a class="btn_add nav-link {% if ruta == '/new_question' %}active{% endif %}" href="/new_question" hidden>Add a question</a>
         </li>
       </ul>
       <form class="d-flex" role="search">
-        <p class="text-white me-4">{{ usuario.name }}</p>
-        <p class="usuario text-white me-4" hidden>{{ usuario.is_admin}}</p>
 
-        <a href="/logout" class="btn btn-outline-danger" type="submit">Logout</a>
+        <a href="/logout" class="btn btn-outline-danger text-white" type="submit">Logout</a>
       </form>
     </div>
   </div>

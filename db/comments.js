@@ -1,5 +1,5 @@
-// const { pool } = require('./pool.js') // produccion
-const pool = require('./pool_dev')
+const { pool } = require('./pool.js') // produccion
+// const pool = require('./pool_dev')
 console.log('comments.js')
 
 async function create_table() {
@@ -23,7 +23,7 @@ async function get_comments() {
 
   const client = await pool.connect()
   const { rows } = await client.query(
-    `select user_id, message_id, comment, date from comments` //, name    ... , users`
+    `select user_id, message_id, comment, date, name, face, face2, hair, hair2, eyes  from comments join users on users.id = comments.user_id order by date desc` //, name    ... , users`
   )
   client.release()
 

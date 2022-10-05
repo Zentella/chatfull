@@ -5,3 +5,11 @@
 body {
   background: #D1F2EB;
 }
+
+i {
+  color: blue;
+}
+
+.badge {
+  margin: 20px 0 0 20px;
+}
