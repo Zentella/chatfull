@@ -11,7 +11,6 @@ const { env } = require('process')
 // const pool = require('./db/conexion.js')
 
 // const pgSession = require('connect-pg-simple')(session)
-const fileUpload = require('express-fileupload')
 
 const app = express()
 const port = process.env.PORT || 3000 // asignar un puerto para la nube o usar 3000
@@ -26,12 +25,6 @@ app.use(express.urlencoded({extended: false}))
 app.use(express.static('./node_modules/bootstrap/dist'))
 app.use(express.static('public'))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-// subir archivos
-app.use(fileUpload({
-  limits: { fileSize: 5242880 },
-  abortOnLimit: true,
-  responseOnLimit: 'max 5Mb'
-}))
 
 // se configura uso de sesiones
 // https://github.com/voxpelli/node-connect-pg-simple
