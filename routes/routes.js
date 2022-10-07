@@ -40,7 +40,7 @@ router.get('/', protected_route, async (req, res) => {
     // console.log('index ',usuario)
     // console.log('mensajes ',mensajes[0].name)
 
-    res.render('index.html', {usuario, mensajes, comentarios}) // , { games, toplay })
+    res.render('index.html', {usuario, mensajes, comentarios})
   } catch (error) {
      console.log(error)
   }
@@ -48,8 +48,6 @@ router.get('/', protected_route, async (req, res) => {
 
 // ruta que carga el formulario del login
 router.get('/login', (req, res) => {
-  // const messages = req.flash()
-  // res.render('login.html', { messages })
   res.render('login.html')
 })
 
@@ -60,8 +58,6 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/register', (req, res) => {
-  // const messages = req.flash()   
-  // res.render('register.html', {messages})
   res.render('register.html')
 })
 
@@ -73,7 +69,6 @@ router.post('/login', async (req, res) => {
   // 2. intento buscar al usuario en base a su email 
   let user_find = await get_user(email)
   if (!user_find) {
-    // req.flash('errors', 'Usuario es inexistente o contraseña incorrecta')
     return res.redirect('/login')
   }
 
@@ -84,14 +79,6 @@ router.post('/login', async (req, res) => {
     return res.redirect('/login')
   }
   
-  // PARTE FINAL
-  /* usuario = {
-    name: user_find.name,
-    email: user_find.email,
-    id: user_find.id,
-    is_admin: user_find.is_admin,
-    play: false
-  } */
   usuario = {
     name: user_find.name,
     email: user_find.email,
@@ -122,13 +109,11 @@ router.post('/register', async (req, res) => {
   
   // validamos que contraseñas coincidan
   if (password != password_repeat) {
-    // req.flash('errors', 'Las contraseñas no coinciden')
     return res.redirect('/register')
   }
   // validamos que no exista otro usuario con ese mismo correo
   const current_user = await get_user(email)
   if (current_user) {
-    // req.flash('errors', 'Ese email ya está ocupado')
     console.log('errors', 'Ese email ya está ocupado')
     return res.redirect('/register')
   }
@@ -142,74 +127,23 @@ router.post('/message', protected_route, async (req, res) => {
   console.log('message ')
   const likes = 0
   console.log('message ', req.body.mensaje, usuario.id, likes)
-  /* if (req.session.mensajes == undefined) {
-    req.session.mensajes = []
-  } */
   try {
-    const mensaje = req.body.mensaje //.trim() //////
-
-    /* console.log('mensaje user id ', mensaje, req.session.user);
-    const userEmail = req.session.user.email //// */
-
-    // console.log('userEmail ', userEmail);
-    /*  const us_id = await User.findOne({
-       where: { email: userEmail }
-     }) */
-    // console.log('us_id ', us_id);
+    const mensaje = req.body.mensaje
 
     await create_message(usuario.id, mensaje, likes)
-
-    // const mess = await Message.findAll({ include: 'user', include: 'comment' }); /************** */
-
-    // console.log('mess ', mess);
-    /*
-    const mess = await Message.findByPk(1, { include: 'user' });
-    console.log('mess ', mess);
-    console.log('mess *****************',mess.toJSON())
-    console.log('obj ', mess.user.firstName);
-    */
-    // res.send({mess})
-    // const messas = []
-
-    /* mess.forEach((item) => {
-      // messas.push(item.UserId, item.message, item.createdAt)
-      const id = item.id
-      const likes = item.likes
-      const us = item.user.firstName
-      const msj = item.message
-      const fecha = item.createdAt
-      console.log('id, likes, us, msj, fecha ', id, likes, us, msj, fecha);
-
-      req.session.mensajes.push({ id, likes, us, msj, fecha })
-    }) */
-    //req.session.mensajes.push({ us, msj, fecha })
 
     res.redirect('/')
 
   } catch (error) {
-    res.status(400)//.redirect('/')
-
-    // res.status(400).json({ error })
+    res.status(400)
   }
 })
 
-router.post('/like/:id', protected_route, async (req, res) => { // req.params.id // id ok
-  // const likes = 1
+router.post('/like/:id', protected_route, async (req, res) => {
   let likes
   const id = req.params.id
   console.log('post likesssss');
-  console.log('params id ', req.params.id); // ok
-  /* const like = req.body.like
-  const likes = 1
-  console.log('lk ',like); */
-
-/*   if (req.session.likes == undefined) {
-    req.session.likes = 0
-  } */ 
-
-    // req.session.likes += likes
-    // req.session.likes ++
-    // console.log('likes ',req.session.likes);
+  console.log('params id ', req.params.id)
 
     const mess = await get_message(id)
      console.log('mess like ', mess.likes);
@@ -221,37 +155,13 @@ router.post('/like/:id', protected_route, async (req, res) => { // req.params.id
 })
 
 router.post('/comment/:id', protected_route, async (req, res) => {
-  // if (req.session.comentarios == undefined) {
-  //   req.session.comentarios = []
-  // }
   try {
     const comentario = req.body.comentario
     const mensaje_id = req.params.id
 
     console.log('msj_id user_usuario.id comentario ', mensaje_id, usuario.id, comentario)
-    /*  const us_id = await User.findOne({
-       where: { email: userEmail }
-     }) */
-    // console.log('us_id ', us_id);
 
     await create_comment(usuario.id, mensaje_id, comentario)
-
-    // const mess = await Comment.findAll({ include: 'user' });
-
-    // console.log('mess ', mess);
-
-   /*  mess.forEach((item) => {
-      // messas.push(item.UserId, item.message, item.createdAt)
-      const id = item.id
-      const likes = item.likes
-      const us = item.user.firstName
-      const msj = item.comment
-      const fecha = item.createdAt
-      console.log('id, likes, us, msj, fecha ', id, likes, us, msj, fecha);
-
-      req.session.comentarios.push({ id, likes, us, msj, fecha })
-    }) */
-    //req.session.mensajes.push({ us, msj, fecha })
 
     res.redirect('/')
 
